@@ -15,4 +15,4 @@ cp -rv $HOME/.gitignore $BASE/
 cp -rv $HOME/.gitconfig $BASE/
 cp -rv $HOME/.bash_aliases $BASE/
 
-echo -e "\nBackup complete\n"
+echo -e "\nBackup completed\n"

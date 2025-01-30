@@ -10,4 +10,4 @@ cp -rv $BASE/.gitignore $HOME/
 cp -rv $BASE/.gitconfig $HOME/
 cp -rv $BASE/.bash_aliases $HOME/
 
-echo -e "\nUploaded complete\n"
+echo -e "\nUpload completed\n"
