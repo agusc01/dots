@@ -1,0 +1,113 @@
+# $ git config --local user.name ""
+# $ git config --local user.email ""
+[user]
+	name = agus
+	email = 33077305+agusc01@users.noreply.github.com
+[github]
+	user = agusc01
+[core]
+	editor = vim
+	pager = less
+	autocrlf = true
+	excludesfile = ~/.gitignore
+[color]
+	status = auto
+	diff = auto
+	branch = auto
+	interative = auto
+	grep = auto
+	ui = auto
+[alias]
+	co = checkout
+	cob = checkout -b
+	b = branch
+	s-s = status -s
+	s = status
+	c = clone
+	# e.g.
+	# d   -> diff HEAD~0
+	# d 0 -> diff HEAD~0
+	# d 1 -> diff HEAD~1
+	# d n -> diff HEAD~n
+	dn = "!f() { git diff HEAD~${1:-0}; }; f"
+	dh = "!f() { git diff ${1:-0} ${2:-HEAD~0}; }; f"
+	d = dn
+	log = log --oneline --decorate
+	lodag = log --oneline --decorate --all --graph
+	alog = "!f() { git log -${1:-5}; }; f"
+	alodag = "!f() { git lodag -${1:-5}; }; f"
+	ls = !"git log --oneline --all --graph --decorate --color=always --format=format:'%C(yellow)%h%C(reset)%C(green)%d%C(reset) %C(white)%s,%C(reset)%C(cyan) %an %ar %C(reset)' | awk '{gsub(/HEAD ->/, \"\\033[36mHEAD \\033[33m->\\033[32m\"); gsub(/origin\\/[^,)]*/, \"\\033[31m&\\033[0m\"); print}'"
+	als = "!f() { git ls | head -${1:-5}; }; f"
+	hist = log --pretty=format:\"%Cgreen%h %Creset%cd %Cblue[%cn] %Creset%s%C(yellow)%d%C(reset)\" --graph --date=relative --decorate --all
+	llog = log --graph --name-status --pretty=format:\"%C(red)%h %C(reset)(%cd) %C(green)%an %Creset%s %C(yellow)%d%Creset\" --date=relative
+	open = "!hub browse"
+	type = cat-file -t
+	dump = cat-file -p
+	find = "!f() { git log --pretty=format:\"%h %cd [%cn] %s%d\" --date=relative -S'pretty' -S\"$@\" | peco | awk '{print $1}' | xargs -I {} git diff {}^ {}; }; f"
+	edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
+	add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+
+	random-name = "!f() { cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 10 | head -n 1; }; f"
+
+	reset-custom = "!f() { \
+		mode=\"$1\"; \
+		commit=\"$2\"; \
+		branch_name=\"reset-${mode}/$(git random-name)\"; \
+		git branch \"${3:-$branch_name}\" && git reset --$mode \"${commit:-HEAD~1}\"; \
+	}; f"
+
+	rsoftn = "!git reset-custom soft HEAD~${1:-1}"
+	rsofth = "!git reset-custom soft ${1:-1}"
+	rhardn = "!git reset-custom hard HEAD~${1:-1}"
+	rhardh = "!git reset-custom hard ${1:-1}"
+	rmixedn = "!git reset-custom mixed HEAD~${1:-1}"
+	rmixedh = "!git reset-custom mixed ${1:-1}"
+	amend = "!git branch \"amend/$(git random-name)\" && git commit --amend"
+	bak = "!folder_name=\"backup-$(basename \"$PWD\")-$(git random-name)\"; mkdir -p \"../$folder_name\" && cp -r .git \"../$folder_name/.git\""
+	bakc = "!ls -lt .. | grep $(basename \"$PWD\")"
+
+	me = "!f() { git merge \"$@\" --edit  ; }; f"
+	ps = "!git push origin $(git rev-parse --abbrev-ref HEAD)"
+    l = "!git pull origin $(git rev-parse --abbrev-ref HEAD)"
+
+	t = tag
+	rmtag = tag -d
+	deletetag = tag -d
+	ct = commit
+	ctm = commit -m
+	st = stash
+	stl = stash list
+	sta = stash apply
+	stm = stash save
+	sts = stash save
+	# no drop
+	stp = stash pop
+	bis = bisect start
+	bib = bisect bad
+	big = bisect good
+	re = remote
+	re-v = remote -v
+	aurlo = remote add origin
+	surlo = remote set-url origin
+	rmurlo = remote rm origin
+	delurlo = remote rm origin
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[help]
+	format = web
+[section]
+	key = value
+[credential]
+	interative = never
+	helper = store
+[push]
+	default = current
+[gc]
+	reflogExpire = never
+	reflogExpireUnreachable = never
+[merge]
+	log = true
+	edit = true
