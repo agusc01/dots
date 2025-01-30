@@ -1,4 +1,5 @@
 {
+  "Comment.nvim": { "branch": "master", "commit": "e30b7f2008e52442154b66f7c519bfd2f1e32acb" },
   "LazyVim": { "branch": "main", "commit": "2bea40c447b72e54ffb2d5cddc98d7798990796f" },
   "SchemaStore.nvim": { "branch": "main", "commit": "085d1a9c4f30de56e312931582e80805f0ed3621" },
   "blink-cmp-copilot": { "branch": "main", "commit": "5d4ed42c5d7d144012792bb6cc4ac7899a108169" },

@@ -92,3 +92,30 @@ map("n", "<Tab>", ">>_", tt)
 -- Decerement tabs
 map("v", "<S-Tab>", "<gv", tt)
 map("n", "<S-Tab>", "<<_", tt)
+
+-- Reduce code
+map("n", "<C-f>", "zfai", tt)
+
+-- TODO: make this works !
+map("n", "<Leader>o", "[i", tt)
+
+-- Back to a character
+map("v", "$", "$h", tt)
+
+-- Line comments
+map("v", "<Leader>ñ", "<Plug>(comment_toggle_linewise_visual)", tt)
+map("n", "<Leader>ñ", "<Plug>(comment_toggle_linewise_current)", tt)
+-- Block comments
+map("v", "<Leader>{", "<Plug>(comment_toggle_blockwise_visual)", tt)
+map("n", "<Leader>{", "<Plug>(comment_toggle_blockwise_current)", tt)
+
+-- Start to select
+map("n", "<leader>j", "0v$", tt)
+map("n", "<leader>J", "v$", tt)
+map("n", "<leader>k", "$v0", tt)
+map("n", "<leader>K", "v0", tt)
+
+map("n", "<Leader>m", "%", tt)
+map("v", "<Leader>m", "%", tt)
+map("n", "<C-m>", "%", tt)
+map("v", "<C-m>", "%", tt)
