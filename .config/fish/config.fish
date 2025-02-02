@@ -1,8 +1,8 @@
 # Ctrl+L to clear the terminal
-bind \cl 'clear'
+bind \cl "clear; commandline -f repaint"
 
 # Ctrl+D to logout or exit
-bind \cd 'exit'
+bind \cd delete-or-exit
 
 # set fish_greeting "Fish!"
 set fish_greeting ""
@@ -62,7 +62,7 @@ end
 if test -f .prompt.fish
     source .prompt.fish
     build_prompt
-    
+
     if not functions -q fish_prompt
         function fish_prompt
             build_prompt
@@ -70,4 +70,3 @@ if test -f .prompt.fish
         end
     end
 end
-

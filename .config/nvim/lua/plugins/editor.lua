@@ -1,4 +1,5 @@
 return {
+
 	{
 		enabled = false,
 		"folke/flash.nvim",
@@ -225,5 +226,16 @@ return {
 				},
 			},
 		},
+	},
+
+	{
+		"mg979/vim-visual-multi",
+		branch = "master",
+		config = function()
+			vim.g.VM_maps = {
+				["Find Under"] = "<C-d>", -- Usa Ctrl+D para seleccionar la siguiente coincidencia
+				["Find Subword Under"] = "<C-d>", -- Permite seleccionar partes de palabras (ej. camelCase)
+			}
+		end,
 	},
 }

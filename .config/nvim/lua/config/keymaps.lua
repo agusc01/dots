@@ -1,121 +1,96 @@
-local tt = { noremap = true, silent = true }
--- local ff = { noremap = false, silent = false }
-local tf = { noremap = true, silent = false }
--- local ft = { noremap = false, silent = true }
 local map = vim.keymap.set
 
--- Do things without affecting the registers
-map("n", "x", '"_x')
-map("n", "<Leader>p", '"0p')
-map("n", "<Leader>P", '"0P')
-map("v", "<Leader>p", '"0p')
-map("n", "<Leader>c", '"_c')
-map("n", "<Leader>C", '"_C')
-map("v", "<Leader>c", '"_c')
-map("v", "<Leader>C", '"_C')
-map("n", "<Leader>d", '"_d')
-map("n", "<Leader>D", '"_D')
-map("v", "<Leader>d", '"_d')
-map("v", "<Leader>D", '"_D')
+map("n", "+", "<C-a>", { desc = "Increment number" })
+map("n", "-", "<C-x>", { desc = "Decrement number" })
+map("n", "<C-a>", "gg<S-v>G", { desc = "Select all" })
 
--- Increment/decrement
-map("n", "+", "<C-a>")
-map("n", "-", "<C-x>")
+-- map("n", "<Leader>o", "o<Esc>^Da", { desc = "Disable continuations" })
+-- map("n", "<Leader>O", "O<Esc>^Da", { desc = "Disable continuations" })
+--
+map("n", "te", ":tabedit", { desc = "New tab" })
+map("n", "<C-Tab>", ":tabnext<CR>", { desc = "Next tab" })
+map("n", "<C-S-Tab>", ":tabprev<CR>", { desc = "Previous tab" })
+map("n", "wh", ":split<Return>", { desc = "New Horizontal Window" })
+map("n", "wv", ":vsplit<Return>", { desc = "New Vertical Window" })
 
--- Delete a word backwards
-map("n", "dw", 'vb"_d')
+map("n", "<C-h>", "<C-w>h", { desc = "Move window to the left" })
+map("n", "<C-j>", "<C-w>j", { desc = "Move window to the down" })
+map("n", "<C-k>", "<C-w>k", { desc = "Move window to the up" })
+map("n", "<C-l>", "<C-w>l", { desc = "Move window to the right" })
 
--- Select all
-map("n", "<C-a>", "gg<S-v>G")
-
--- Save with root permission (not working for now)
---vim.api.nvim_create_user_command('W', 'w !sudo tee > /dev/null %', {})
-
--- Disable continuations
-map("n", "<Leader>o", "o<Esc>^Da", tt)
-map("n", "<Leader>O", "O<Esc>^Da", tt)
-
--- Jumplist
-map("n", "<C-m>", "<C-i>", tt)
-
--- New tab
-map("n", "te", ":tabedit")
--- map("n", "<Tab>", ":tabnext<Return>", tt)
--- map("n", "<S-Tab>", ":tabprev<Return>", tt)
--- Split window
-map("n", "ss", ":split<Return>", tt)
-map("n", "sv", ":vsplit<Return>", tt)
--- Move window
-map("n", "sh", "<C-w>h")
-map("n", "sk", "<C-w>k")
-map("n", "sj", "<C-w>j")
-map("n", "sl", "<C-w>l")
-
--- Resize window
-map("n", "<C-w><left>", "<C-w><")
-map("n", "<C-w><right>", "<C-w>>")
-map("n", "<C-w><up>", "<C-w>+")
-map("n", "<C-w><down>", "<C-w>-")
+map("n", "<S-h>", "<C-w><", { desc = "Resize window h-" })
+map("n", "<S-l>", "<C-w>>", { desc = "Resize window h+" })
+map("n", "<S-k>", "<C-w>+", { desc = "Resize window v-" })
+map("n", "<S-j>", "<C-w>-", { desc = "Resize window v+" })
 
 -- Diagnostics
-map("n", "<C-j>", function()
-	vim.diagnostic.goto_next()
-end, tt)
+-- map("n", "<C-j>", function()
+-- 	vim.diagnostic.goto_next()
+-- end, tt)
 
 map("n", "<Leader>r", function()
 	require("craftzdog.hsl").replaceHexWithHSL()
 end)
-
-map("n", "<Leader>i", function()
+map("n", "<Leader>p", function()
 	require("craftzdog.lsp").toggleInlayHints()
-end)
+end, { desc = "Toggle Inlay Hints" })
 
-map("i", "nn", "<Esc>", tt)
+map({ "v", "i" }, "nn", "<Esc>", { desc = "Escape from visual or insert node" })
 
--- Show comands
-map("n", "<C-p>", ":", tf)
-map("n", "<Leader>p", ":", tf)
-map("v", "<C-p>", ":", tf)
-map("v", "<Leader>p", ":", tf)
-map("i", "<C-p>", "<Esc>:", tf)
+local function telescope(modes, func, desc, key)
+	map(modes, key, function()
+		require("telescope.builtin")[func]({
+			cwd = vim.fn.getcwd(),
+			layout_config = { prompt_position = "top" },
+			sorting_strategy = "ascending",
+			smart_case = true,
+			attach_mappings = function(_, map)
+				local actions = require("telescope.actions")
+				map("i", "<C-j>", actions.move_selection_next)
+				map("i", "<C-k>", actions.move_selection_previous)
+				return true
+			end,
+		})
+	end, { desc = desc })
+end
 
--- Duplicate lines
-map("n", "<C-d>", "yyp", tt)
-map("n", "<Leader>d", "yyp", tt)
-map("v", "<C-d>", "y<Esc>p", tt)
-map("v", "<Leader>d", "y<Esc>p", tt)
-map("i", "<C-d>", "<Esc>yyp", tt)
+telescope("n", "command_history", "Command History", "<C-p>")
+telescope("n", "search_history", "Search History", "<C-o>")
+telescope("n", "live_grep", "Find words (grep)", "<C-f>")
+telescope("n", "find_files", "Find files (fgrep)", "<C-r>")
+telescope("n", "oldfiles", "Find oldfiles (fgrep)", "<C-t>")
+telescope("n", "grep_string", "Find current word (fgrep)", "<C-g>")
+telescope("n", "registers", "History registers", "<C-m>")
 
--- Incremenet tabs
-map("v", "<Tab>", ">gv", tt)
-map("n", "<Tab>", ">>_", tt)
--- Decerement tabs
-map("v", "<S-Tab>", "<gv", tt)
-map("n", "<S-Tab>", "<<_", tt)
+map({ "n", "v" }, "<Leader>t", function()
+	vim.cmd("split | resize 10 | terminal")
+end, { desc = "Open terminal (split)" })
 
--- Reduce code
-map("n", "<C-f>", "zfai", tt)
+map({ "n", "v" }, "<Leader>T", function()
+	vim.cmd("vsplit | resize 10 | terminal")
+end, { desc = "Open terminal (vsplit)" })
 
--- TODO: make this works !
-map("n", "<Leader>o", "[i", tt)
+map("n", "<Leader>d", "yyp", { desc = "Duplicate line" })
+map("v", "<Leader>d", "y<Esc>p", { desc = "Duplicate line" })
 
--- Back to a character
-map("v", "$", "$h", tt)
+map("v", "<Tab>", ">gv", { desc = "Increment tabulation" })
+map("n", "<Tab>", ">>_", { desc = "Increment tabulation" })
+map("v", "<S-Tab>", "<gv", { desc = "Decrement tabulation" })
+map("n", "<S-Tab>", "<<_", { desc = "Decrement tabulation" })
 
--- Line comments
-map("v", "<Leader>ñ", "<Plug>(comment_toggle_linewise_visual)", tt)
-map("n", "<Leader>ñ", "<Plug>(comment_toggle_linewise_current)", tt)
--- Block comments
-map("v", "<Leader>{", "<Plug>(comment_toggle_blockwise_visual)", tt)
-map("n", "<Leader>{", "<Plug>(comment_toggle_blockwise_current)", tt)
+map("v", "$", "$h", { desc = "Back to a character" })
 
--- Start to select
-map("n", "<leader>j", "0v$", tt)
-map("n", "<leader>J", "v$", tt)
-map("n", "<leader>k", "$v0", tt)
-map("n", "<leader>K", "v0", tt)
+map("v", "<Leader>ñ", "<Plug>(comment_toggle_linewise_visual)", { desc = "Toggle Comment Line" })
+map("n", "<Leader>ñ", "<Plug>(comment_toggle_linewise_current)", { desc = "Toggle Comment Line" })
+map("v", "<Leader>{", "<Plug>(comment_toggle_blockwise_visual)", { desc = "Toggle Comment Block" })
+map("n", "<Leader>{", "<Plug>(comment_toggle_blockwise_current)", { desc = "Toggle Comment Block" })
 
-map("n", "<Leader>m", "%", tt)
-map("v", "<Leader>m", "%", tt)
-map("n", "<C-m>", "%", tt)
-map("v", "<C-m>", "%", tt)
+map("n", "<leader>j", "0v$", { desc = "Select line and go down (0v$)" })
+map("n", "<leader>J", "v$", { desc = "Select from cursor position and go down (v$)" })
+map("n", "<leader>k", "$v0", { desc = "Select line and go up ($v0)" })
+map("n", "<leader>K", "v0", { desc = "Select from cursor position and go up (v0)" })
+
+map({ "n", "v" }, "<Leader>m", "%", { desc = "Jumping (%)" })
+
+map("n", "<C-w>", ":confirm wq<CR>", { desc = "Save file" })
+map({ "v", "i" }, "<C-w>", "<Esc>:confirm wq<CR>", { desc = "Save file" })
