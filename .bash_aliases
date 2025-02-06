@@ -2,7 +2,10 @@
 alias l="ls -Ahltr"
 alias grep="grep --color=auto"
 alias g="git"
-alias g="git a"
+alias ga="git add"
+alias gs="git s"
+alias gct="git commit"
+alias gctm="git commit -m"
 
 # Navigation
 alias dk="cd ~/Desktop"
