@@ -46,7 +46,6 @@ if test -f $LOCAL_CONFIG
     source $LOCAL_CONFIG
 end
 
-
 set -gx HISTTIMEFORMAT "%F %T "
 
 set RED '\033[0;31m'

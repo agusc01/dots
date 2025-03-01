@@ -56,8 +56,8 @@ map("n", "+", "<C-a>", { desc = "Increment number" })
 map("n", "-", "<C-x>", { desc = "Decrement number" })
 map("n", "<C-a>", "gg<S-v>G", { desc = "Select all" })
 
-map("n", "<S-Tab>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-map("n", "<C-S-Tab>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+-- map("n", "<C-Tab>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+-- map("n", "<C-S-Tab>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 
 map("n", "<leader>d", "yyp", { desc = "Duplicate line" })
 map("v", "<leader>d", "y<Esc>p", { desc = "Duplicate line" })
@@ -84,3 +84,37 @@ map("n", "<leader>K", "v0", { desc = "Select from cursor position and go up (v0)
 -- % Jumping
 map("n", "<C-w>", ":q<Cr>", { desc = "Save file", silent = false })
 map({ "v", "i" }, "<C-w>", "<Esc>:q<Cr>", { desc = "Save file", silent = false })
+
+map("n", "<S-s>", "viw", { desc = "Select current word" })
+map("n", "<S-n>", "yiw", { desc = "Copy current word" })
+
+local function find_and_replace()
+	local grug = require("grug-far")
+	local ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
+	local current_word = vim.fn.expand("<cword>")
+
+	grug.open({
+		transient = true,
+		prefills = {
+			filesFilter = ext and ext ~= "" and "*." .. ext or nil,
+			search = current_word,
+			flags = "--fixed-strings",
+		},
+	})
+end
+
+map("n", "<S-r>", find_and_replace, { desc = "Find and Replace current word in all files" })
+
+map("n", "<leader>r", find_and_replace, { desc = "Find and Replace current word in all files" })
+
+map("n", "<leader>R", function()
+	local grug = require("grug-far")
+	grug.open({
+		transient = true,
+		prefills = {
+			search = vim.fn.expand("<cword>"),
+			paths = vim.fn.expand("%:p"),
+			flags = "--fixed-strings",
+		},
+	})
+end, { desc = "Find and Replace current word in current file" })

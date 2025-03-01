@@ -111,3 +111,5 @@
 [merge]
 	log = true
 	edit = true
+[safe]
+	directory = /opt/lampp/htdocs/ecommercephp

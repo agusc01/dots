@@ -2,9 +2,7 @@ vim.g.mapleader = " "
 
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
-
 vim.opt.number = true
-
 vim.opt.title = true
 vim.opt.autoindent = true
 vim.opt.smartindent = true
@@ -31,6 +29,7 @@ vim.opt.wildignore:append({ "*/node_modules/*" })
 vim.opt.splitbelow = true -- Put new windows below current
 vim.opt.splitright = true -- Put new windows right of current
 vim.opt.splitkeep = "cursor"
+vim.o.foldmethod = "manual"
 -- vim.opt.mouse = ""
 
 -- Undercurl
